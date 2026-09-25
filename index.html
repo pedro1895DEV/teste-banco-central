@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprender Valor | Análise de Engajamento das Escolas</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --danger: #dc2626;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+
+        header .tag {
+            display: inline-block;
+            background: #dbeafe;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .kpi-card .label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-card .value {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .kpi-card .sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .kpi-card.danger .value { color: var(--danger); }
+        .kpi-card.success .value { color: var(--success); }
+        .kpi-card.primary .value { color: var(--primary); }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 992px) {
+            .charts-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .chart-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 380px;
+            width: 100%;
+        }
+
+        .insights-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .insights-card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.35rem;
+            color: var(--text-main);
+        }
+
+        .insights-card p.subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .insights-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .insight-item {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+        }
+
+        .insight-item h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .insight-item p {
+            font-size: 0.875rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="kpi-grid">
+            <div class="kpi-card primary">
+                <div class="label">Escolas Aderidas</div>
+                <div class="value" id="kpi-total">11.260</div>
+                <div class="sub">Total analisado (≥ 28/05/2021)</div>
+            </div>
+            <div class="kpi-card success">
+                <div class="label">Escolas Ativas</div>
+                <div class="value" id="kpi-ativas">7.953</div>
+                <div class="sub">70.6% com estudantes ou profissionais</div>
+            </div>
+            <div class="kpi-card danger">
+                <div class="label">Escolas Inativas</div>
+                <div class="value" id="kpi-inativas">3.307</div>
+                <div class="sub">29.4% sem alunos e sem formação</div>
+            </div>
+            <div class="kpi-card">
+                <div class="label">Com Estudantes Cadastrados</div>
+                <div class="value" id="kpi-alunos">7.865</div>
+                <div class="sub">4.680 exclusivas + 3.185 conjuntas</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h2>Progresso das Escolas na Plataforma</h2>
+                <p>Distribuição das 11.260 escolas aderidas de acordo com o avanço prático de alunos e professores:<br>
+                <strong>70,6% Ativas:</strong> 7.953 escolas com turmas ou professores em curso.<br>
+                <strong>29,4% Inativas:</strong> 3.307 escolas sem nenhuma atividade registrada.</p>
+                <div class="chart-container">
+                    <canvas id="chartCategorias"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h2>Escolas Inativas por Estado</h2>
+                <p>Volume de escolas sem alunos e sem formação de profissionais em cada Estado.</p>
+                <div class="chart-container">
+                    <canvas id="chartEstados"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="insights-card">
+            <h2>Ponderações</h2>
+            <p class="subtitle">Pontos de atenção identificados a partir dos dados da planilha:</p>
+            <div class="insights-grid">
+                <div class="insight-item">
+                    <h3>Problemas após a Adesão (29,4%)</h3>
+                    <p><strong>3.307 escolas</strong> aderiram formalmente, mas não cadastraram turmas nem iniciaram formações. O que pode indicar a necessidade de maior acompanhamento e suporte inicial.</p>
+                </div>
+                <div class="insight-item">
+                    <h3>Concentração Regional das Inativas</h3>
+                    <p>Os estados do <strong>Pará (544)</strong> e <strong>Maranhão (431)</strong> lideram com folga o volume de escolas inativas. Estratégias em parceria com as Secretarias de Educação locais são fundamentais para reduzir esses índices.</p>
+                </div>
+                <div class="insight-item">
+                    <h3>Oportunidade na Formação Docente (41,6%)</h3>
+                    <p><strong>4.680 escolas</strong> já registraram estudantes, mas a equipe pedagógica ainda não iniciou os cursos. Estimular o início da formação desses profissionais é o caminho ideal para possibilitar a execução do programa.</p>
+                </div>
+                <div class="insight-item">
+                    <h3>Engajamento Pleno (28,3%)</h3>
+                    <p><strong>3.185 escolas</strong> já possuem tanto turmas registradas quanto profissionais em capacitação ativa, representando o ecossistema com maior maturidade e sucesso de implementação do programa.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const fallbackData = {
+            total_aderidas: 11260,
+            total_inativas: 3307,
+            categorias: {
+                "Estudantes ou Profissionais": 7953,
+                "Apenas Estudantes": 4680,
+                "Inativas": 3307,
+                "Estudantes e Profissionais": 3185,
+                "Apenas Profissionais": 88
+            },
+            inativas_por_estado: {
+                "PARÁ": 544, "MARANHÃO": 431, "RIO GRANDE DO SUL": 329,
+                "SÃO PAULO": 285, "BAHIA": 237, "PERNAMBUCO": 172,
+                "PARANÁ": 165, "PIAUÍ": 135, "RIO GRANDE DO NORTE": 105,
+                "AMAZONAS": 92, "CEARÁ": 90, "RIO DE JANEIRO": 88,
+                "ESPÍRITO SANTO": 85, "TOCANTINS": 83, "MINAS GERAIS": 73,
+                "AMAPÁ": 59, "SANTA CATARINA": 53, "ALAGOAS": 42,
+                "MATO GROSSO": 40, "MATO GROSSO DO SUL": 40, "PARAÍBA": 39,
+                "RORAIMA": 32, "GOIÁS": 31, "DISTRITO FEDERAL": 22,
+                "SERGIPE": 21, "ACRE": 11, "RONDÔNIA": 3
+            }
+        };
+
+        function renderDashboard(data) {
+            document.getElementById('kpi-total').innerText = data.total_aderidas.toLocaleString('pt-BR');
+            document.getElementById('kpi-inativas').innerText = data.total_inativas.toLocaleString('pt-BR');
+            if (data.categorias["Estudantes ou Profissionais"]) {
+                document.getElementById('kpi-ativas').innerText = data.categorias["Estudantes ou Profissionais"].toLocaleString('pt-BR');
+            }
+
+            const ctxCat = document.getElementById('chartCategorias').getContext('2d');
+            new Chart(ctxCat, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data.categorias),
+                    datasets: [{
+                        label: 'Número de Escolas',
+                        data: Object.values(data.categorias),
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.85)',
+                            'rgba(16, 185, 129, 0.85)',
+                            'rgba(239, 68, 68, 0.85)',
+                            'rgba(245, 158, 11, 0.85)',
+                            'rgba(139, 92, 246, 0.85)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ${ctx.parsed.y.toLocaleString('pt-BR')} escolas`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f1f5f9' },
+                            ticks: { callback: (v) => v.toLocaleString('pt-BR') }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { maxRotation: 45, minRotation: 20 }
+                        }
+                    }
+                }
+            });
+
+            const ctxEst = document.getElementById('chartEstados').getContext('2d');
+            new Chart(ctxEst, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data.inativas_por_estado),
+                    datasets: [{
+                        label: 'Escolas Inativas',
+                        data: Object.values(data.inativas_por_estado),
+                        backgroundColor: 'rgba(220, 38, 38, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ${ctx.parsed.y.toLocaleString('pt-BR')} escolas inativas`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { maxRotation: 60, minRotation: 45, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        fetch('./dados.json')
+            .then(res => res.json())
+            .then(data => renderDashboard(data))
+            .catch(() => renderDashboard(fallbackData));
+    </script>
+</body>
+</html>

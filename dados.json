@@ -1,0 +1,40 @@
+{
+  "total_aderidas": 11260,
+  "total_inativas": 3307,
+  "categorias": {
+    "Estudantes ou Profissionais": 7953,
+    "Apenas Estudantes": 4680,
+    "Inativas": 3307,
+    "Estudantes e Profissionais": 3185,
+    "Apenas Profissionais": 88
+  },
+  "inativas_por_estado": {
+    "PARÁ": 544,
+    "MARANHÃO": 431,
+    "RIO GRANDE DO SUL": 329,
+    "SÃO PAULO": 285,
+    "BAHIA": 237,
+    "PERNAMBUCO": 172,
+    "PARANÁ": 165,
+    "PIAUÍ": 135,
+    "RIO GRANDE DO NORTE": 105,
+    "AMAZONAS": 92,
+    "CEARÁ": 90,
+    "RIO DE JANEIRO": 88,
+    "ESPÍRITO SANTO": 85,
+    "TOCANTINS": 83,
+    "MINAS GERAIS": 73,
+    "AMAPÁ": 59,
+    "SANTA CATARINA": 53,
+    "ALAGOAS": 42,
+    "MATO GROSSO": 40,
+    "MATO GROSSO DO SUL": 40,
+    "PARAÍBA": 39,
+    "RORAIMA": 32,
+    "GOIÁS": 31,
+    "DISTRITO FEDERAL": 22,
+    "SERGIPE": 21,
+    "ACRE": 11,
+    "RONDÔNIA": 3
+  }
+}

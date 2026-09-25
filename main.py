@@ -109,4 +109,14 @@ plt.title('Distribuição de Escolas Inativas por Estado')
 plt.xticks(rotation=45)
 plt.tight_layout()
 
+import json
+dados_exportacao = {
+    "total_aderidas": int(escolas_aderiram["Cod Escola"].nunique()),
+    "total_inativas": int(total_inativas),
+    "categorias": {str(k): int(v) for k, v in dados_grafico.items()},
+    "inativas_por_estado": {str(k): int(v) for k, v in dados_grafico_inativas.items()}
+}
+with open('dados.json', 'w', encoding='utf-8') as f:
+    json.dump(dados_exportacao, f, ensure_ascii=False, indent=2)
+
 plt.show()
