@@ -1,4 +1,22 @@
-# Análise de Dados - Programa Aprender Valor (Banco Central)
+# Análise de Dados - Programa Aprender Valor
+
+## Explicação
+
+A parte central do projeto é o arquivo `main.py`, que concentra toda a lógica de tratamento e análise dos dados da planilha. O arquivo `index.html` atua como cliente consumindo os dados gerados pelo arquivo Python no arquivo `dados.json`.
+
+```text
+  ┌────────────────────────┐                    ┌─────────────────┐                     ┌────────────┐                ┌───────────────────────┐            ┌──────────────────────┐
+  │                        │                    │                 │                     │            │                │                       │            │                      │
+  │                        │                    │                 │                     │            │                │                       │            │                      │
+  │     Planilha Excel     ├─Leitura─e─Filtros─►│ Python / Pandas ├─Exporta─Resultados─►│ dados.json ├─Lê─via─fetch──►│        Client         ├─Renderiza─►│ Dashboard Interativo │
+  │                        │                    │    (main.py)    │                     │            │                │      (index.html)     │            │    (GitHub Pages)    │
+  │                        │                    │                 │                     │            │                │                       │            │                      │
+  └────────────────────────┘                    └─────────────────┘                     └────────────┘                └───────────────────────┘            └──────────────────────┘
+```
+
+> **Dashboard Online:** Acesse a visualização interativa pelo [GitHub Pages](https://pedro1895dev.github.io/teste-banco-central/).
+
+---
 
 ## Como Executar
 
@@ -7,9 +25,9 @@
    pip install -r requirements.txt
    ```
 
-3. **Salve a planilha .xlsx na raíz do projeto**
+2. **Certifique-se de que a planilha `exercicio-excel.xlsx` está na raiz do projeto.**
 
-2. **Execute o script:**
+3. **Execute o script:**
    ```bash
    python main.py
    ```
@@ -28,6 +46,6 @@
    * Quantidade de escolas inativas.
    * Quantidade de escolas com apenas profissionais, apenas estudantes, ambos ou qualquer um dos dois.
 
-3. **Gráficos Visuais:**
-   * **Gráfico 1:** Distribuição de escolas por tipo de atividade.
-   * **Gráfico 2:** Distribuição das escolas inativas por Estado (UF).
+3. **Exportação e Gráficos:**
+   * Gera o arquivo **`dados.json`** atualizado para alimentar o dashboard web.
+   * Exibe os gráficos nativos do **Matplotlib** no terminal.
